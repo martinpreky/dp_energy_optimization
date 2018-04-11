@@ -16,17 +16,48 @@ from models.modelThreeLBFGSBOptimizer import *
 from models.modelThreePSOOptimizer import *
 
 import numpy as np
+import pandas as pd
+import multiprocessing as mp
 
-if __name__ == '__main__':
-    print(__name__)
+
+
+def opt(house):
     dutils.PATH_TO_DATA = 'data/raw/'
-    house = "dataid1103.csv"
-    day = 70
-    numberOfDays = 1
+    day = 1
+    numberOfDays = 365
     x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
 
-    # m = ModelOneEBOptimizer(ids, x, grid, cons, prod)
     m = ModelOneLBFGSBOptimizer(ids, x, grid, cons, prod)
+    m.optimize()
+
+    csvName = "data/interim/"+house+"_"+m.__class__.__name__+"_"+str(day)+"_"+str(numberOfDays)+".csv"
+    return (m, csvName)
+
+if __name__ == '__main__':
+    
+    dutils.PATH_TO_DATA = 'data/raw/'    
+    with mp.Pool(mp.cpu_count()) as pool:
+
+        allHouses = dutils.get_houses_csvs()
+        firstXhouses = allHouses[:2]
+
+        for (model, pathFile) in pool.imap_unordered(opt, firstXhouses):
+            print(pathFile)
+            df = pd.DataFrame(data=model.getReport())
+            df.to_csv(path_or_buf=pathFile, sep=";", na_rep="N/A")
+        
+        print("end of for loop")
+        pool.close()
+        pool.join()
+    
+    
+    # house = "dataid1103.csv"
+    # day = 70
+    # numberOfDays = 20
+    # x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
+
+    # m = ModelOneEBOptimizer(ids, x, grid, cons, prod)
+    # m = ModelOneLBFGSBOptimizer(ids, x, grid, cons, prod)
     # m = ModelOnePSOOptimizer(ids, x, grid, cons, prod)
     # m = ModelTwoEBOptimizer(ids, x, grid, cons, prod)
     # m = ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod)
@@ -35,8 +66,8 @@ if __name__ == '__main__':
     # m = ModelThreeLBFGSBOptimizer(ids, x, grid, cons, prod)
     # m = ModelThreePSOOptimizer(ids, x, grid, cons, prod)
     
-    m.optimize()
-    m.showPlot()
+    # m.optimize()
+    # m.showPlot()
     # report = m.getReport()
     # print(report)
 
