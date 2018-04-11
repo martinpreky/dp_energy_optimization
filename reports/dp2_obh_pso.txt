@@ -1,0 +1,138 @@
+MINIMIZE ENERGY
+
+dataid1103.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  24.0652226284
+New Grid  593.177785807
+E from Phtovoltaic  336.102131386
+-check- Grid  393.20235
+-check- Cons  607.13925
+-check- Prod  527.972516667
+-check- fopt  593.177785807
+
+dataid114.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  44.6354178544
+New Grid  1119.64066461
+E from Phtovoltaic  389.356230874
+-check- Grid  854.379933333
+-check- Cons  1200.7178
+-check- Prod  443.121083333
+-check- fopt  1119.64066461
+
+dataid1169.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  29.6382074058
+New Grid  639.848701694
+E from Phtovoltaic  369.796121107
+-check- Grid  384.492116667
+-check- Cons  660.556333333
+-check- Prod  484.0307
+-check- fopt  639.848701694
+
+dataid1192.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  27.2970590348
+New Grid  627.867830422
+E from Phtovoltaic  599.517414218
+-check- Grid  482.3068
+-check- Cons  949.1732
+-check- Prod  824.933433333
+-check- fopt  627.867830422
+
+dataid1283.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  36.1775885928
+New Grid  802.032569431
+E from Phtovoltaic  517.658051213
+-check- Grid  668.124666667
+-check- Cons  1015.4878
+-check- Prod  777.514766667
+-check- fopt  802.032569431
+
+--------------------------------------------
+
+MINIMIZE PRICE
+
+dataid1103.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  19.8316633521
+New Grid  698.626262047
+E from Phtovoltaic  348.0859076
+-check- Grid  393.20235
+-check- Cons  607.13925
+-check- Prod  527.972516667
+-check- fopt  19.8316633521
+
+dataid114.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  35.5753042632
+New Grid  1104.33849327
+E from Phtovoltaic  388.993243816
+-check- Grid  854.379933333
+-check- Cons  1200.7178
+-check- Prod  443.121083333
+-check- fopt  35.5753042632
+
+dataid1169.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  25.0339345047
+New Grid  724.660970156
+E from Phtovoltaic  370.397205733
+-check- Grid  384.492116667
+-check- Cons  660.556333333
+-check- Prod  484.0307
+-check- fopt  25.0339345047
+
+dataid1192.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  26.9207251195
+New Grid  802.024629599
+E from Phtovoltaic  609.905188864
+-check- Grid  482.3068
+-check- Cons  949.1732
+-check- Prod  824.933433333
+-check- fopt  26.9207251195
+
+dataid1283.csv
+
+Stopping search: Swarm best objective change less than 1e-08
+Price  29.5195091226
+New Grid  849.839890391
+E from Phtovoltaic  502.597555738
+-check- Grid  668.124666667
+-check- Cons  1015.4878
+-check- Prod  777.514766667
+-check- fopt  29.5195091226
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

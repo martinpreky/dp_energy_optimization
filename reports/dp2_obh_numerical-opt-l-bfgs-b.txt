@@ -1,0 +1,197 @@
+MINIMIZE ENERGY
+
+dataid1103.csv
+
+Price  3.15372552667
+New Grid  139.201933333
+E from Phtovoltaic  471.546009548
+-check- Grid  393.20235
+-check- Cons  607.13925
+-check- Prod  527.972516667
+------------------
+RESULT.fu  139.201933333
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+RESULT.nfev  188181
+RESULT.nit  249
+
+dataid114.csv
+
+Price  23.2373762504
+New Grid  757.596716667
+E from Phtovoltaic  443.121083333
+-check- Grid  854.379933333
+-check- Cons  1200.7178
+-check- Prod  443.121083333
+------------------
+RESULT.fu  757.596716667
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  188902
+RESULT.nit  213
+
+dataid1169.csv
+
+Price  6.90453606729
+New Grid  181.626170731
+E from Phtovoltaic  478.931807958
+-check- Grid  384.492116667
+-check- Cons  660.556333333
+-check- Prod  484.0307
+------------------
+RESULT.fu  181.626170731
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  718116
+RESULT.nit  859
+
+dataid1192.csv
+
+Price  4.60405352938
+New Grid  199.53415
+E from Phtovoltaic  750.218908231
+-check- Grid  482.3068
+-check- Cons  949.1732
+-check- Prod  824.933433333
+------------------
+RESULT.fu  199.53415
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: NORM_OF_PROJECTED_GRADIENT_<=_PGTOL'
+RESULT.nfev  297052
+RESULT.nit  382
+
+dataid1283.csv
+
+Price  12.7629811184
+New Grid  402.951203579
+E from Phtovoltaic  621.82662336
+-check- Grid  668.124666667
+-check- Cons  1015.4878
+-check- Prod  777.514766667
+------------------
+RESULT.fu  402.951203579
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  316519
+RESULT.nit  394
+
+------------------------------------------------------------------
+
+MINIMIZE PRICE
+
+dataid1103.csv
+
+Price  0.779280359891
+New Grid  147.591407612
+E from Phtovoltaic  460.843178954
+-check- Grid  393.20235
+-check- Cons  607.13925
+-check- Prod  527.972516667
+------------------
+RESULT.fu  0.779280359891
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  2168047
+RESULT.nit  2696
+
+dataid114.csv
+
+Price  10.3337997389
+New Grid  771.623273247
+E from Phtovoltaic  430.556782673
+-check- Grid  854.379933333
+-check- Cons  1200.7178
+-check- Prod  443.121083333
+------------------
+RESULT.fu  10.3337997389
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  1343944
+RESULT.nit  1776
+
+dataid1169.csv
+
+Price  1.82003996862
+New Grid  196.753679287
+E from Phtovoltaic  466.20595817
+-check- Grid  384.492116667
+-check- Cons  660.556333333
+-check- Prod  484.0307
+------------------
+RESULT.fu  1.82003996862
+RESULT.success  False
+RESULT.message  b'STOP: TOTAL NO. of f AND g EVALUATIONS EXCEEDS LIMIT'
+RESULT.nfev  3000081
+RESULT.nit  3940
+
+dataid1192.csv
+
+Price  1.58292803306
+New Grid  215.008669121
+E from Phtovoltaic  740.313648071
+-check- Grid  482.3068
+-check- Cons  949.1732
+-check- Prod  824.933433333
+------------------
+RESULT.fu  1.58292803306
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  2837135
+RESULT.nit  3671
+
+dataid1283.csv
+
+Price  11.1252169122
+New Grid  447.923839277
+E from Phtovoltaic  579.394420412
+-check- Grid  668.124666667
+-check- Cons  1015.4878
+-check- Prod  777.514766667
+------------------
+RESULT.fu  11.1252169122
+RESULT.success  True
+RESULT.message  b'CONVERGENCE: REL_REDUCTION_OF_F_<=_FACTR*EPSMCH'
+RESULT.nfev  1082221
+RESULT.nit  1252
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

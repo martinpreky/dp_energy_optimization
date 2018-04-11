@@ -1,0 +1,9 @@
+scipy for optimization
+
+
+L-bfgs-B
+prva kniha
+https://www.osti.gov/servlets/purl/204262
+
+druha kniha
+http://delivery.acm.org/10.1145/280000/279236/p550-zhu.pdf?ip=147.175.153.226&id=279236&acc=ACTIVE%20SERVICE&key=77610643254839C8%2EF82AD233C393E1D5%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35&__acm__=1521477287_7640b71ae12d3998623e7ccd39629008#URLTOKEN#
