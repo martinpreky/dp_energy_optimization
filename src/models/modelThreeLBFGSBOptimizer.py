@@ -8,30 +8,59 @@ class ModelThreeLBFGSBOptimizer(Optimizer):
 
     def __init__(self, ids, dateTime, loadGrid, loadCons, loadProd):
         super().__init__(ids, dateTime, loadGrid, loadCons, loadProd)
-        self.bounds = [(0,0)] + [(0,self.batteryCapacity)] * (len(self.loadCons) - 1)
         self.RESULT = ""
+        self.bounds = np.array([]) #[(0,0)] + [(0,self.batteryCapacity)] * (len(self.loadCons) - 1)
+        self.newGrid = np.array([])
+        self.prodUsage = np.array([])
+        self.battCharge = np.array([])
+        self.prices = np.array(self.prices)
         
     
     def optimize(self):
     
-        # TODO: prerobit na "po jednom dni postupne na dalsi den"
-        self.RESULT = opt.minimize(  strategy.costFuncOnMinPrice,
-                                np.repeat(0, len(self.loadCons)), 
-                                args=(self.loadCons, self.loadProd, self.prices),
-                                bounds = self.bounds, 
-                                method = 'L-BFGS-B',
-                                options = {'disp': False, 'maxiter': 15000, 'maxfun': 3000000})
+        numberOfDays = int (len(self.dateTime) / 24)
+        oneDayBounds = 0
+        oneDayNewGrid = 0
+        oneDayProdUsage = 0
+        oneDayBattCharge = 0
+
+        for idx, (oneDayLoadCons, oneDayLoadProd, oneDayPrices) in enumerate(zip(np.split(self.loadCons, numberOfDays), np.split(self.loadProd, numberOfDays), np.split(self.prices, numberOfDays))):
+
+            if idx is 0:
+                oneDayBounds = [(0,0)] + [(0,self.batteryCapacity)] * 23
+            else:
+                oneDayBounds = [(0, self.battCharge[-1])] + [(0,self.batteryCapacity)] * 23
+
+            RESULT = opt.minimize(  strategy.costFuncOnMinPrice,
+                                    np.repeat(0, 24), 
+                                    args=(oneDayLoadCons, oneDayLoadProd, oneDayPrices),
+                                    bounds = oneDayBounds, 
+                                    method = 'L-BFGS-B',
+                                    options = {'disp': False, 'maxiter': 15000, 'maxfun': 3000000})
+            
+            oneDayNewGrid = strategy.newGridEvolution(RESULT.x, oneDayLoadCons, oneDayLoadProd)
+            oneDayProdUsage = strategy.costEvolutionProduction(RESULT.x, oneDayLoadCons, oneDayLoadProd)
+            oneDayBattCharge = RESULT.x
         
-        self.newGrid = strategy.newGridEvolution(self.RESULT.x, self.loadCons, self.loadProd)
-        self.prodUsage = strategy.costEvolutionProduction(self.RESULT.x, self.loadCons, self.loadProd)
-        self.battCharge = self.RESULT.x
+            if len(self.bounds) is 0:
+                self.bounds = oneDayBounds
+            else:
+                self.bounds = np.append(self.bounds, oneDayBounds, axis=0)
+            self.newGrid = np.append(self.newGrid, oneDayNewGrid)
+            self.prodUsage = np.append(self.prodUsage, oneDayProdUsage)
+            self.battCharge = np.append(self.battCharge, oneDayBattCharge)
+
 
     def getReport(self):
         updateDict = super().getReport()
-        updateDict.update({ "bounds": self.bounds,
-                            "RESULT.fun": self.RESULT.fun,
-                            "RESULT.success": self.RESULT.success,
-                            "RESULT.message": self.RESULT.message,
-                            "RESULT.nfev": self.RESULT.nfev,
-                            "RESULT.nit": self.RESULT.nit})
+        lb = self.bounds[:,0]
+        ub = self.bounds[:,1]
+        updateDict.update({ "lb": lb,
+                            "ub": ub
+                            # "RESULT.fun": self.RESULT.fun,
+                            # "RESULT.success": self.RESULT.success,
+                            # "RESULT.message": self.RESULT.message,
+                            # "RESULT.nfev": self.RESULT.nfev,
+                            # "RESULT.nit": self.RESULT.nit
+                            })
         return updateDict

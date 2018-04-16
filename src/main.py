@@ -27,7 +27,7 @@ def opt(house):
     numberOfDays = 365
     x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
 
-    m = ModelOneLBFGSBOptimizer(ids, x, grid, cons, prod)
+    m = ModelThreePSOOptimizer(ids, x, grid, cons, prod)
     m.optimize()
 
     csvName = "data/interim/"+house+"_"+m.__class__.__name__+"_"+str(day)+"_"+str(numberOfDays)+".csv"
@@ -36,7 +36,7 @@ def opt(house):
 if __name__ == '__main__':
     
     dutils.PATH_TO_DATA = 'data/raw/'    
-    with mp.Pool(mp.cpu_count()) as pool:
+    with mp.Pool(2) as pool:
 
         allHouses = dutils.get_houses_csvs()
         firstXhouses = allHouses[:2]
