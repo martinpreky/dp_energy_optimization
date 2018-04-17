@@ -15,37 +15,59 @@ class ModelTwoLBFGSBOptimizer(Optimizer):
     
     def optimize(self):
     
-        numberOfDays = int (len(self.dateTime) / 24)
-        oneDayBounds = 0
+        windowSize = 2
+        daySize = 24
+    
+        numberOfDays = int (len(self.dateTime) / daySize)
+        windowBounds = 0
+        
         oneDayNewGrid = 0
         oneDayProdUsage = 0
         oneDayBattCharge = 0
 
-        for idx, (oneDayLoadCons, oneDayLoadProd) in enumerate(zip(np.split(self.loadCons, numberOfDays), np.split(self.loadProd, numberOfDays))):
+        # This code is not general, for Two days size windows ... 
+        tmpFirstLoadCons = np.split(self.loadCons[:-daySize], numberOfDays - 1)
+        tmpLastLoadCons = np.split(self.loadCons[daySize:], numberOfDays - 1)
+        windowsLoadCons = np.hstack((tmpFirstLoadCons, tmpLastLoadCons))
+
+        tmpFirstLoadProd = np.split(self.loadProd[:-daySize], numberOfDays - 1)
+        tmpLastLoadProd = np.split(self.loadProd[daySize:], numberOfDays - 1)
+        windowsLoadProd = np.hstack((tmpFirstLoadProd, tmpLastLoadProd))
+
+
+        # for idx, (wLoadCons, wLoadProd) in enumerate(zip(np.split(self.loadCons, numberOfDays), np.split(self.loadProd, numberOfDays))):
+
+        for idx, (wLoadCons, wLoadProd) in enumerate(zip(windowsLoadCons, windowsLoadProd)):
 
             if idx is 0:
-                oneDayBounds = [(0,0)] + [(0,self.batteryCapacity)] * 23
+                windowBounds = [(0,0)] + [(0,self.batteryCapacity)] * ((windowSize * daySize) - 1)
             else:
-                oneDayBounds = [(0, self.battCharge[-1])] + [(0,self.batteryCapacity)] * 23
+                windowBounds = [(0, self.battCharge[-1])] + [(0,self.batteryCapacity)] * ((windowSize * daySize) - 1)
 
             RESULT = opt.minimize(  strategy.costFuncOnMinEDiff,
-                                    np.repeat(0, 24), 
-                                    args=(oneDayLoadCons, oneDayLoadProd),
-                                    bounds = oneDayBounds, 
+                                    np.repeat(0, (windowSize * daySize)), 
+                                    args=(wLoadCons, wLoadProd),
+                                    bounds = windowBounds, 
                                     method = 'L-BFGS-B',
                                     options = {'disp': False, 'maxiter': 15000, 'maxfun': 3000000})
             
-            oneDayNewGrid = strategy.newGridEvolution(RESULT.x, oneDayLoadCons, oneDayLoadProd)
-            oneDayProdUsage = strategy.costEvolutionProduction(RESULT.x, oneDayLoadCons, oneDayLoadProd)
-            oneDayBattCharge = RESULT.x
+            oneDayNewGrid = strategy.newGridEvolution(RESULT.x[:daySize], wLoadCons[:daySize], wLoadProd[:daySize])
+            oneDayProdUsage = strategy.costEvolutionProduction(RESULT.x[:daySize], wLoadCons[:daySize], wLoadProd[:daySize])
+            oneDayBattCharge = RESULT.x[:daySize]
         
             if len(self.bounds) is 0:
-                self.bounds = oneDayBounds
+                self.bounds = windowBounds[:daySize]
             else:
-                self.bounds = np.append(self.bounds, oneDayBounds, axis=0)
+                self.bounds = np.append(self.bounds, windowBounds[:daySize], axis=0)
             self.newGrid = np.append(self.newGrid, oneDayNewGrid)
             self.prodUsage = np.append(self.prodUsage, oneDayProdUsage)
             self.battCharge = np.append(self.battCharge, oneDayBattCharge)
+        
+        # By Sliding Window we are one day short, appending zeros to be equal with other arrays lengths
+        self.bounds = np.append(self.bounds, [(0,0)]*daySize, axis=0) 
+        self.newGrid = np.append(self.newGrid, [0]*daySize) 
+        self.prodUsage = np.append(self.prodUsage, [0]*daySize) 
+        self.battCharge = np.append(self.battCharge, [0]*daySize) 
 
 
     def getReport(self):

@@ -9,15 +9,7 @@ class ModelTwoEBOptimizer(Optimizer):
     def optimize(self):
         for idx, (prod_i, cons_i) in enumerate(zip(self.loadProd, self.loadCons)):
             
-            batt_tmp = self.battCharge[idx-1] + prod_i
-
-            if batt_tmp >= self.batteryCapacity:
-                self.battCharge[idx] = self.batteryCapacity
-                self.prodUsage[idx] = self.batteryCapacity - self.battCharge[idx-1]
-            else:
-                self.battCharge[idx] = batt_tmp
-                self.prodUsage[idx] = prod_i
-
+            self.battCharge[idx] = self.battCharge[idx-1] + prod_i
 
             if cons_i > self.gridThreshold:
                 self.newGrid[idx] = self.gridThreshold
@@ -32,7 +24,13 @@ class ModelTwoEBOptimizer(Optimizer):
             else:
                 self.newGrid[idx] = cons_i
             
-            
+            if self.battCharge[idx] >= self.batteryCapacity:
+                self.prodUsage[idx] = prod_i - (self.battCharge[idx] - self.batteryCapacity)
+                self.battCharge[idx] = self.batteryCapacity
+            else:
+                # self.battCharge[idx] = batt_tmp
+                self.prodUsage[idx] = prod_i
+
     def getReport(self):
         updateDict = super().getReport()
         updateDict.update({ "battDischarge": self.battDischarge,

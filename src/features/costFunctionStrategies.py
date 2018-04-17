@@ -19,5 +19,8 @@ def newGridEvolution(X, CONS, PROD):
     return np.array(CONS + batt_diff - PROD).clip(0,100)
 
 def costEvolutionProduction(X, CONS, PROD):
-    D = np.insert(np.diff(X), 0, 0).clip(0, 100)
-    return PROD - (PROD - (CONS + D)).clip(0,100)
+    # batt_diff = np.insert(np.diff(X), 0, 0).clip(0, 100)
+    # return PROD - (PROD - (CONS + batt_diff)).clip(0,100)
+    batt_diff = np.insert(np.diff(X), 0, 0)
+    load = np.array(CONS + batt_diff)
+    return np.where(load >= PROD, PROD, load).clip(0, 100)

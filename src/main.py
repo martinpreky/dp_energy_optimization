@@ -31,19 +31,44 @@ if __name__ == '__main__':
     with mp.Pool(2) as pool:
 
         allHouses = dutils.get_houses_csvs()
-        firstXhouses = allHouses[:2]
+        firstXhouses = allHouses[:1]
             
         models = np.array([])
         for house in firstXhouses:
             day = 1
-            numberOfDays = 365
-            x, grid, cons, prod, ids = dutils.init_data(firstXhouses[0], numberOfDays, day)
+            numberOfDays = 20
+            x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
 
             models = np.append(models, ModelOneLBFGSBOptimizer(ids, x, grid, cons, prod))
             models[-1].defineDataAttrs(house, numberOfDays, day)
             
-            # models = np.append(models, ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod))
-            # models[-1].defineDataAttrs(house, numberOfDays, day)
+            models = np.append(models, ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+
+            models = np.append(models, ModelThreeLBFGSBOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+
+
+
+            models = np.append(models, ModelOnePSOOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+            
+            models = np.append(models, ModelTwoPSOOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+
+            models = np.append(models, ModelThreePSOOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+
+
+
+            models = np.append(models, ModelOneEBOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+            
+            models = np.append(models, ModelTwoEBOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+
+            models = np.append(models, ModelThreeEBOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
 
         for (model) in pool.imap_unordered(opt, models):
             pathFile = "data/interim/" + model.getCsvName()
