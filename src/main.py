@@ -21,17 +21,9 @@ import multiprocessing as mp
 
 
 
-def opt(house):
-    dutils.PATH_TO_DATA = 'data/raw/'
-    day = 1
-    numberOfDays = 365
-    x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
-
-    m = ModelThreePSOOptimizer(ids, x, grid, cons, prod)
+def opt(m):
     m.optimize()
-
-    csvName = "data/interim/"+house+"_"+m.__class__.__name__+"_"+str(day)+"_"+str(numberOfDays)+".csv"
-    return (m, csvName)
+    return (m)
 
 if __name__ == '__main__':
     
@@ -40,9 +32,23 @@ if __name__ == '__main__':
 
         allHouses = dutils.get_houses_csvs()
         firstXhouses = allHouses[:2]
+            
+        models = np.array([])
+        for house in firstXhouses:
+            day = 1
+            numberOfDays = 365
+            x, grid, cons, prod, ids = dutils.init_data(firstXhouses[0], numberOfDays, day)
 
-        for (model, pathFile) in pool.imap_unordered(opt, firstXhouses):
+            models = np.append(models, ModelOneLBFGSBOptimizer(ids, x, grid, cons, prod))
+            models[-1].defineDataAttrs(house, numberOfDays, day)
+            
+            # models = np.append(models, ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod))
+            # models[-1].defineDataAttrs(house, numberOfDays, day)
+
+        for (model) in pool.imap_unordered(opt, models):
+            pathFile = "data/interim/" + model.getCsvName()
             print(pathFile)
+
             df = pd.DataFrame(data=model.getReport())
             df.to_csv(path_or_buf=pathFile, sep=";", na_rep="N/A")
         

@@ -20,6 +20,21 @@ class Optimizer():
     
     def optimize(self):
         pass
+    
+    def defineDataAttrs(self, houseName, numberOfDays, sinceDay):
+        self.houseName = houseName
+        self.numberOfDays = numberOfDays
+        self.sinceDay = sinceDay
+    
+    def getCsvName(self):
+        return  str(self.houseName + 
+                    "_" + 
+                    self.__class__.__name__ + 
+                    "_" + 
+                    str(self.sinceDay) + 
+                    "_" + 
+                    str(self.numberOfDays) + 
+                    ".csv")
         
     def getReport(self):
         return {"id": self.id,
