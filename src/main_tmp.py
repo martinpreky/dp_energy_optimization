@@ -27,10 +27,10 @@ if __name__ == '__main__':
     house = allHouses[0]
         
     day = 1
-    numberOfDays = 4
+    numberOfDays = 20
     x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
 
-    model = ModelOneLBFGSBOptimizer(ids, x, grid, cons, prod)
+    model = ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod)
     model.defineDataAttrs(house, numberOfDays, day)
 
     model.optimize()
