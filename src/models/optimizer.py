@@ -53,7 +53,7 @@ class Optimizer():
     
     def showPlot(self):
         plt.clf()
-        plt.plot(self.dateTime, self.loadGrid, c='b', label='Load Grid')
+        # plt.plot(self.dateTime, self.loadGrid, c='b', label='Load Grid')
         plt.plot(self.dateTime, self.loadProd, c='g', label='Load Prod')
         plt.plot(self.dateTime, self.loadCons, c='r', ls='dashed', label='Load Cons')
 

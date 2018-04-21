@@ -43,20 +43,21 @@ class ModelOnePSOOptimizer(Optimizer):
             windowLb = [0] * (windowSize * daySize)
             if idx is 0:
                 windowUb = [0.01] + [self.batteryCapacity] * ((windowSize * daySize) - 1)
+                lastCharge = 0
             else:
                 windowUb = [0.01 if self.battCharge[-1] <= 0 else self.battCharge[-1]] + [self.batteryCapacity] * ((windowSize * daySize) - 1)
-
+                lastCharge = self.battCharge[-1]
 
             windowBattCharge, fopt = ps.pso(strategy.costFuncOnMinE,
                                         windowLb,
                                         windowUb,
-                                        args=(wLoadCons, wLoadProd),
+                                        args=(wLoadCons, wLoadProd, lastCharge),
                                         debug=False,
                                         swarmsize=30,
                                         maxiter=100000)
             
-            oneDayNewGrid = strategy.newGridEvolution(windowBattCharge[:daySize], wLoadCons[:daySize], wLoadProd[:daySize])
-            oneDayProdUsage = strategy.costEvolutionProduction(windowBattCharge[:daySize], wLoadCons[:daySize], wLoadProd[:daySize])
+            oneDayNewGrid = strategy.newGridEvolution(windowBattCharge[:daySize], wLoadCons[:daySize], wLoadProd[:daySize], lastCharge)
+            oneDayProdUsage = strategy.costEvolutionProduction(windowBattCharge[:daySize], wLoadCons[:daySize], wLoadProd[:daySize], lastCharge)
             oneDayBattCharge = windowBattCharge[:daySize]
 
             self.lb = np.append(self.lb, windowLb[:daySize])

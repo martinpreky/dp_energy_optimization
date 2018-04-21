@@ -46,18 +46,20 @@ class ModelThreeLBFGSBOptimizer(Optimizer):
 
             if idx is 0:
                 windowBounds = [(0,0)] + [(0,self.batteryCapacity)] * ((windowSize * daySize) - 1)
+                lastCharge = 0
             else:
                 windowBounds = [(0, self.battCharge[-1])] + [(0,self.batteryCapacity)] * ((windowSize * daySize) - 1)
+                lastCharge = self.battCharge[-1]
 
             RESULT = opt.minimize(  strategy.costFuncOnMinPrice,
                                     np.repeat(0, (windowSize * daySize)), 
-                                    args=(wLoadCons, wLoadProd, wPrice),
+                                    args=(wLoadCons, wLoadProd, wPrice, lastCharge),
                                     bounds = windowBounds, 
                                     method = 'L-BFGS-B',
                                     options = {'disp': False, 'maxiter': 15000, 'maxfun': 3000000})
             
-            oneDayNewGrid = strategy.newGridEvolution(RESULT.x[:daySize], wLoadCons[:daySize], wLoadProd[:daySize])
-            oneDayProdUsage = strategy.costEvolutionProduction(RESULT.x[:daySize], wLoadCons[:daySize], wLoadProd[:daySize])
+            oneDayNewGrid = strategy.newGridEvolution(RESULT.x[:daySize], wLoadCons[:daySize], wLoadProd[:daySize], lastCharge)
+            oneDayProdUsage = strategy.costEvolutionProduction(RESULT.x[:daySize], wLoadCons[:daySize], wLoadProd[:daySize], lastCharge)
             oneDayBattCharge = RESULT.x[:daySize]
         
             if len(self.bounds) is 0:

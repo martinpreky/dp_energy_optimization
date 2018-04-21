@@ -1,13 +1,19 @@
 from models.optimizer import *
+import numpy as np
 
 class ModelTwoEBOptimizer(Optimizer):
     def __init__(self, ids, dateTime, loadGrid, loadCons, loadProd):
         super().__init__(ids, dateTime, loadGrid, loadCons, loadProd)
         self.battDischarge = [0] * len(self.loadCons)
+        self.thresholds = np.array([])
         self.gridThreshold = 1.5
     
     def optimize(self):
         for idx, (prod_i, cons_i) in enumerate(zip(self.loadProd, self.loadCons)):
+
+            if (idx+1) % 24 is 0:
+                self.gridThreshold = sum(self.loadCons[idx-23:idx+1])/24
+                self.thresholds = np.append(self.thresholds, np.repeat(self.gridThreshold, 24))
             
             self.battCharge[idx] = self.battCharge[idx-1] + prod_i
 
@@ -34,5 +40,5 @@ class ModelTwoEBOptimizer(Optimizer):
     def getReport(self):
         updateDict = super().getReport()
         updateDict.update({ "battDischarge": self.battDischarge,
-                            "gridThreshold": self.gridThreshold})
+                            "gridThreshold": self.thresholds})
         return updateDict

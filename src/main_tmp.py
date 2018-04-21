@@ -24,19 +24,24 @@ if __name__ == '__main__':
     dutils.PATH_TO_DATA = 'data/raw/'  
 
     allHouses = dutils.get_houses_csvs()
-    house = allHouses[0]
+    house = allHouses[0] # dataid1103.csv
         
-    day = 1
-    numberOfDays = 20
+    day = 220
+    numberOfDays = 30
     x, grid, cons, prod, ids = dutils.init_data(house, numberOfDays, day)
 
-    model = ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod)
+    # model = ModelTwoLBFGSBOptimizer(ids, x, grid, cons, prod)
+    # model = ModelTwoPSOOptimizer(ids, x, grid, cons, prod)
+    model = ModelTwoEBOptimizer(ids, x, grid, cons, prod)
+    # model = ModelThreePSOOptimizer(ids, x, grid, cons, prod)
     model.defineDataAttrs(house, numberOfDays, day)
 
     model.optimize()
 
-    pathFile = "data/interim/" + model.getCsvName()
-    print(pathFile)
+    model.showPlot()
 
-    df = pd.DataFrame(data=model.getReport())
-    df.to_csv(path_or_buf=pathFile, sep=";", na_rep="N/A")
+    # pathFile = "data/interim/" + model.getCsvName()
+    # print(pathFile)
+
+    # df = pd.DataFrame(data=model.getReport())
+    # df.to_csv(path_or_buf=pathFile, sep=";", na_rep="N/A")
